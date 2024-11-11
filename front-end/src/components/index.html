@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factorial Calculator</title>
+</head>
+<body>
+    <h1>Factorial Calculator</h1>
+    <input type="number" id="number" placeholder="Enter a number" required>
+    <button onclick="calculateFactorial()">Calculate</button>
+    <p id="result"></p>
+
+    <script>
+        async function calculateFactorial() {
+            const number = document.getElementById('number').value;
+
+            if (number === '') {
+                alert('Please enter a number.');
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/factorial', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ number: parseInt(number) })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                document.getElementById('result').innerText = `Factorial: ${data.factorial}`;
+            } else {
+                document.getElementById('result').innerText = `Error: ${data.error}`;
+            }
+        }
+    </script>
+</body>
+</html>
